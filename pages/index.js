@@ -4,6 +4,7 @@ import {
   useQuery,
   gql
 } from '@apollo/client';
+import Table from '../components/common/table/index';
 
 const ENTRIES = gql`
   query getEntries {
@@ -20,6 +21,41 @@ const ENTRIES = gql`
   }
 `;
 
+const PRODUCT_HEADERS = [
+  {
+    label: 'Date',
+    field: 'date',
+    formatter: 'date'
+  },
+  {
+    label: 'Vendor',
+    field: 'vendor.name',
+  },
+  {
+    label: 'Ingredient',
+    field: 'ingredient',
+    formatter: 'startCase'
+  },
+  {
+    label: 'Quality',
+    field: 'quality',
+  },
+  {
+    label: 'Total',
+    field: 'count',
+  },
+  {
+    label: 'Actions',
+    field: 'verify',
+    formatter: (action) => {
+      if (action) {
+        return 'Verify';
+      } else {
+        return 'Confirmed';
+      }
+    }
+  },
+];
 
 export default function Home() {
   const { loading, error, data } = useQuery(ENTRIES);
@@ -38,7 +74,8 @@ export default function Home() {
       <main className={styles.main}>
         <h1>Robertos Dashboard</h1>
 
-        <ul>
+        <Table entries={data.entries} headers={PRODUCT_HEADERS} groupBy="ingredient"/>
+        {/* <ul>
           {data.entries.map( entry => {
             return (
               <li key={entry.date}>
@@ -46,7 +83,7 @@ export default function Home() {
               </li>
             )
           })}
-        </ul>
+        </ul> */}
       </main>
     </div>
   )
