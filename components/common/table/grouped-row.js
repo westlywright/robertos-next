@@ -6,6 +6,13 @@ const useSubRows = (config = null) => {
 
   return { subRowConfig, setSubRows };
 };
+
+const useAdditional = (config = null) => {
+  const [additionalConfig, setAddtional] = React.useState(config);
+
+  return { additionalConfig, setAddtional };
+};
+
 export default function GroupedRow(props) {
   let showSubRows = false;
   const { group, subHeaders, index } = props;
@@ -13,6 +20,10 @@ export default function GroupedRow(props) {
   const total = rows.map((r) => r.count).reduce((acc, curr) => acc + curr);
   const rowHasActions = rows.some((row) => row.verify);
   const { subRowConfig, setSubRows } = useSubRows({ showSubRows: false });
+  const { additionalConfig, setAddtional } = useAdditional({
+    showAdditionalEntries: false,
+  });
+
   const updateSubRows = () => {
     if (subRowConfig.showSubRows) {
       showSubRows = false;
@@ -21,6 +32,18 @@ export default function GroupedRow(props) {
     }
     return setSubRows({ showSubRows });
   };
+
+  const updateAdditional = () => {
+    let showAdditionalEntries = true;
+
+    if (additionalConfig.showAdditionalEntries) {
+      showAdditionalEntries = false;
+    }
+
+    console.log(showAdditionalEntries);
+    return setAddtional({ showAdditionalEntries });
+  };
+
   const groupedRow = (
     <tr className="group-row">
       <td>
@@ -34,15 +57,18 @@ export default function GroupedRow(props) {
       </td>
     </tr>
   );
-  const out = [groupedRow];
 
-  if (group.rows.length > 0 && subRowConfig.showSubRows) {
+  const out = [groupedRow];
+  let groupRows = [...group.rows].slice(0, 9);
+
+  if (additionalConfig.showAdditionalEntries && group.rows.length > 10) {
+    groupRows = group.rows;
+  }
+
+  if (groupRows.length > 0 && subRowConfig.showSubRows) {
     const neu = (
       <td colSpan="5" className="subrow">
-        <table
-          className="subtable"
-          key={`group-subtable-${group}-${index}`}
-        >
+        <table className="subtable" key={`group-subtable-${group}-${index}`}>
           <thead>
             <tr>
               {subHeaders.map((header, index) => (
@@ -53,7 +79,7 @@ export default function GroupedRow(props) {
             </tr>
           </thead>
           <tbody>
-            {group.rows.map((item, index) => (
+            {groupRows.map((item, index) => (
               <UngroupedRow
                 key={index}
                 row={item}
@@ -63,6 +89,18 @@ export default function GroupedRow(props) {
             ))}
           </tbody>
         </table>
+
+        {group.rows.length > 10 && (
+          <div className="show-more">
+            <button type="button" onClick={updateAdditional}>
+              {additionalConfig.showAdditionalEntries ? (
+                <span>- Show Less</span>
+              ) : (
+                <span>+ Show All</span>
+              )}
+            </button>
+          </div>
+        )}
       </td>
     );
     out.push(neu);

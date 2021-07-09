@@ -25,10 +25,10 @@ const useSortedItems = (items, config = null) => {
     let sortableItems = [...items];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
+        if (get(a, sortConfig.key) < get(b, sortConfig.key)) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
+        if (get(a, sortConfig.key) > get(b, sortConfig.key)) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
         return 0;
@@ -127,12 +127,27 @@ const useColumns = (headers, groupByConfig = {}, config = null) => {
   }, [headers, groupByConfig]);
 
   return { columns };
+}
+
+const ucFirst = (string = null) => {
+  if (!string) {
+    return;
+  }
+
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
 export default function Table(props) {
+  const groupByLable = ucFirst(props.groupBy);
+  const {deafultSortKey = 'date', defaultSortDirection = 'descending' } = props;
+
   const { items, requestSort, sortConfig } = useSortedItems(
     props.entries,
-    props
+    {
+      key: deafultSortKey,
+      direction: defaultSortDirection,
+      ...props
+    }
   );
 
   const { groupedItems, requestGroup, groupConfig } = useGroupedItems(
@@ -167,9 +182,9 @@ export default function Table(props) {
   };
 
   return (
-    <div>
-      <div>
-        <label>Group By: </label>
+    <div className="box">
+      <div className="grouping">
+        <h4>Group By: </h4>
         <label>
           <input
             name="groupBy"
@@ -177,11 +192,11 @@ export default function Table(props) {
             checked={groupConfig.groupByEnabled}
             onChange={requestGroup}
           />
-          {props.groupBy}
+          {groupByLable}
         </label>
       </div>
       <table className="sortable-table">
-        <thead>
+        <thead className="header">
           <tr>
             {columns.map((header, index) => (
               <th key={index}>

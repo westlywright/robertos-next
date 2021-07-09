@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #f7f9fa;
 }
 
 a {
@@ -15,6 +16,38 @@ a {
   box-sizing: border-box;
 }
 
+button {
+  padding: 5px;
+  height: 1.75rem;
+  color: #fff;
+  background-color: #3d98d3;
+  border: none;
+  border-radius: 0.25rem;
+  outline: none;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.0375em;
+}
+
+button:disabled {
+  background-color: #dcdee7;
+  color: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tbody td {
+  padding: 0.5em;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+  background-color: #f7f9fa;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -26,6 +59,7 @@ thead th {
 }
 
 thead button {
+  color: inherit;
   border: 0;
   border-radius: none;
   background-color: transparent;
@@ -36,37 +70,70 @@ thead button {
   margin-bottom: 1px;
 }
 
-thead button.ascending::after {
-  content: '\21CA';
-  display: inline-block;
-  margin-left: 1em;
-}
-
-thead button.descending::after {
-  content: '\21C8';
-  display: inline-block;
-  margin-left: 1em;
-}
-
 tbody td {
-  padding: 0.5em;
+  padding: 1em 0.5em;
   border-bottom: 1px solid #ccc;
 }
 
-tbody tr:hover {
-  background-color: lightgray;
-}
-table {
+.box {
   width: 100%;
-  border-collapse: collapse;
+  margin-bottom: 1em;
+  padding: 0 1.5em;
+  padding-bottom: 0px;
+  padding-bottom: 24px;
+  background-color: #fff;
+  border: 1px solid #e7e9eb;
+  border-radius: 0.25em;
 }
 
-thead th {
+.grouping {
+  float: right;
+  padding-right: 15px;
+  margin-bottom: 10px;
+}
+
+.grouping h4 {
+  margin: 5px 0 5px 0;
+}
+
+.grouping input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.sortable-table .subtable {
+  margin-bottom: 15px;
+}
+
+.sortable-table .subtable thead button {
+  cursor: default;
+}
+
+.sortable-table .subtable thead tr:hover {
+  background-color: transparent;
+}
+
+.sortable-table thead.header button.ascending::after {
+  content: "\21CA";
+  display: inline-block;
+  margin-left: 5px;
+  position: relative;
+  top: -2px;
+}
+
+.sortable-table thead.header button.descending::after {
+  content: "\21C8";
+  display: inline-block;
+  margin-left: 5px;
+  position: relative;
+  top: -2px;
+}
+
+.sortable-table thead.header th {
   text-align: left;
   border-bottom: 2px solid black;
 }
 
-thead button {
+.sortable-table thead.header button {
   border: 0;
   border-radius: none;
   font-family: inherit;
@@ -76,27 +143,10 @@ thead button {
   margin-bottom: 1px;
 }
 
-thead button.ascending::after {
-  content: '\21CA';
-  display: inline-block;
-  margin-left: 1em;
-}
-
-thead button.descending::after {
-  content: '\21C8';
-  display: inline-block;
-  margin-left: 1em;
-}
-
-tbody td {
-  padding: 0.5em;
-  border-bottom: 1px solid #ccc;
-}
-
-tbody tr:hover {
-  background-color: #eee;
-}
-
-.sortable-table .subrow{
+.sortable-table .subrow {
   padding: 0 0 0 50px;
-}  
+}
+.show-more {
+  text-align: center;
+  padding: 15px 0;
+}
